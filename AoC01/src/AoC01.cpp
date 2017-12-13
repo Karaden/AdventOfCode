@@ -21,15 +21,18 @@ int solution4 = 9;
 
 int calculate(int* data, int arrayLength);
 
-int main() {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+int main()
+{
 
+	int result = calculate(sample4, (sizeof(sample4)/sizeof(*sample4)));
 
-	int result = calculate(sample1, 4);
-
-	if (result != solution1)
+	if (result != solution4)
 	{
 		cout << "Wrong result: " << result << endl;
+	}
+	else
+	{
+		cout << "Looks good. Result is: " << result << endl;
 	}
 
 	return 0;
@@ -41,14 +44,32 @@ int calculate(int* data, int arrayLength)
 {
 
 	int total = -1;
-	// loop for array.length
+	int comp = 0;
 
-	// if i == last item in array then 2ndComparator == 0
-	// else 2ndComparator == i+1
+	if ((data != NULL) && (arrayLength > 0))
+	{
+		total = 0;
 
-	//if array[i] == array[2ndComparator] then add array[i] to int Total
+		// loop for array.length1
+		for(int i = 0; i < arrayLength; i++)
+		{
+		// if i == last item in array then 2ndComparator == 0
+			if (i == (arrayLength - 1))
+			{
+				comp = 0;
+			}
+			else //2ndComparator == i+1
+			{
+				comp = i + 1;
+			}
 
-
+			//if array[i] == array[2ndComparator] then add array[i] to int Total
+			if (data[i] == data[comp])
+			{
+				total += data[i];
+			}
+		}
+	}
 
 	return total;
 }
