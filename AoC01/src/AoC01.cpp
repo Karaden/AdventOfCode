@@ -96,15 +96,8 @@ int calculate(int* data, int arrayLength)
 		// loop for array.length1
 		for(int i = 0; i < arrayLength; i++)
 		{
-		// if i == last item in array then 2ndComparator == 0
-			if (i == (arrayLength - 1))
-			{
-				comp = 0;
-			}
-			else //2ndComparator == i+1
-			{
-				comp = i + 1;
-			}
+			// if i == last item in array then 2ndComparator == 0 else 2ndComparator == i+1
+			comp = (i + 1) % arrayLength;
 
 			//if array[i] == array[2ndComparator] then add array[i] to int Total
 			if (data[i] == data[comp])
