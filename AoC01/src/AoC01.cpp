@@ -57,8 +57,11 @@ int puzzleInput[] = {3,1,8,1,3,1,7,4,3,4,9,2,3,5,9,7,2,1,5,9,8,1,1,8,6,9,7,5,5,1
 		3,7,8,1,8,4,6,2,5,4,2,5,3,7,5,9,7,1,4,5,7,3,3,5,4,5,4,4,9,9,7,8,5,3,1,5,3,7,9,8,8,6,2,4,3,6,8,8,7,8,8,9,3,1,8,6,4,6,6,4,3,
 		3,5,9,5,5,5,6,6,3,1,3,5,4,7,6,2,6,1,8,6,3};
 
-void test(int actual, int expected)
+
+bool test(int actual, int expected)
 {
+	bool result = false;
+
 	if (actual != expected)
 		{
 			cout << "Wrong result: " << actual << endl;
@@ -66,7 +69,10 @@ void test(int actual, int expected)
 		else
 		{
 			cout << "Looks good. Result is: " << actual << endl;
+			result = true;
 		}
+
+	return result;
 
 }
 
@@ -100,20 +106,18 @@ int calculate(int* data, int arrayLength)
 int main()
 {
 
-	int result = calculate(sample1, (sizeof(sample1)/sizeof(*sample1)));
-	test(result, solution1);
+	int result;
 
-	result = calculate(sample2, (sizeof(sample2)/sizeof(*sample2)));
-	test(result, solution2);
+	if (
+		(test(calculate(sample1, (sizeof(sample1)/sizeof(*sample1))), solution1)) &&
+		(test(calculate(sample2, (sizeof(sample2)/sizeof(*sample2))), solution2)) &&
+		(test(calculate(sample3, (sizeof(sample3)/sizeof(*sample3))), solution3)) &&
+		(test(calculate(sample4, (sizeof(sample4)/sizeof(*sample4))), solution4)))
+		 {
+			 result = calculate(puzzleInput, (sizeof(puzzleInput)/sizeof(*puzzleInput)));
+			 	cout << "Final result is: " << result << endl;
+		 }
 
-	result = calculate(sample3, (sizeof(sample3)/sizeof(*sample3)));
-	test(result, solution3);
-
-	result = calculate(sample4, (sizeof(sample4)/sizeof(*sample4)));
-	test(result, solution4);
-
-	result = calculate(puzzleInput, (sizeof(puzzleInput)/sizeof(*puzzleInput)));
-	cout << "Final result is: " << result << endl;
 
 	return 0;
 
