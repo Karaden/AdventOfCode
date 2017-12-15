@@ -50,13 +50,15 @@ int puzzleInput[] = {3,1,8,1,3,1,7,4,3,4,9,2,3,5,9,7,2,1,5,9,8,1,1,8,6,9,7,5,5,1
 
 int sample1[] = {1,2,1,2};
 int sample2[] = {1,2,2,1};
-int sample3[] = {1,2,3,1,2,3};
-int sample4[] = {1,2,1,3,1,4,1,5};
+int sample3[] = {1,2,3,4,2,5};
+int sample4[] = {1,2,3,1,2,3};
+int sample5[] = {1,2,1,3,1,4,1,5};
 
 int solution1 = 6;
 int solution2 = 0;
 int solution3 = 4;
-int solution4 = 4;
+int solution4 = 12;
+int solution5 = 4;
 
 
 bool test(int actual, int expected)
@@ -104,7 +106,22 @@ int calculate(int* data, int arrayLength)
 		// loop for array.length1
 		for(int i = 0; i < arrayLength; i++)
 		{
-			//
+			/*
+			 if length is 10:
+			 i = 0, comp = 5
+			 i = 4, comp = 9
+			 i = 5, comp = 0 -> wraparound!
+
+			 */
+
+			comp = (i + (arrayLength/2)) % arrayLength;
+
+
+			//if array[i] == array[2ndComparator] then add array[i] to int Total
+			if (data[i] == data[comp])
+			{
+				total += data[i];
+			}
 
 		}
 	}
@@ -124,7 +141,8 @@ int main() {
 	(test(calculate(sample1, (sizeof(sample1)/sizeof(*sample1))), solution1)) &&
 	(test(calculate(sample2, (sizeof(sample2)/sizeof(*sample2))), solution2)) &&
 	(test(calculate(sample3, (sizeof(sample3)/sizeof(*sample3))), solution3)) &&
-	(test(calculate(sample4, (sizeof(sample4)/sizeof(*sample4))), solution4)))
+	(test(calculate(sample4, (sizeof(sample4)/sizeof(*sample4))), solution4)) &&
+	(test(calculate(sample5, (sizeof(sample5)/sizeof(*sample5))), solution5)))
 	 {
 		 result = calculate(puzzleInput, (sizeof(puzzleInput)/sizeof(*puzzleInput)));
 		 	cout << "Final result is: " << result << endl;
