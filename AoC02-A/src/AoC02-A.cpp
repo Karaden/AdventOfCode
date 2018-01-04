@@ -17,6 +17,8 @@
 using namespace std;
 
 vector<vector<int> > data;
+vector<vector<int> > sampleData;
+int sampleSolution = 18;
 
 struct splitter
 {
@@ -44,14 +46,13 @@ Container& split(Container& result,
 	return result;
 }
 
-
-
-void readFile()
+vector<vector<int> > readFile(const char * filepath, char token)
 {
 	ifstream myfile;
 	string line;
+	vector<vector<int> > target;
 
-	myfile.open("src/input.txt");
+	myfile.open(filepath);
 
 	if (myfile.is_open())
 	{
@@ -64,8 +65,7 @@ void readFile()
 			vector<int> irow;
 
 			// tokenise the line and store it in row
-			// split on tab character
-			split(srow, sline, '\t');
+			split(srow, sline, token);
 
 			//convert to int and copy to int vector
 			for (unsigned int i = 0; i < srow.size(); i++)
@@ -76,9 +76,10 @@ void readFile()
 			}
 
 			// create the row
-			data.push_back(irow);
+			target.push_back(irow);
 		}
 		myfile.close();
+		cout << "no. of rows in target vector: " << target.size() << "\n";
 	}
 
 	else
@@ -86,14 +87,89 @@ void readFile()
 		cout << "Unable to open file";
 	}
 
+	return target;
+}
+
+bool test(int actual, int expected)
+{
+	bool result = false;
+
+	if (actual != expected)
+		{
+			cout << "Wrong result: " << actual << endl;
+		}
+		else
+		{
+			cout << "Looks good. Result is: " << actual << endl;
+			result = true;
+		}
+
+	return result;
+
+}
+
+int calculate(vector<vector<int> > dataArray)
+{
+
+	int totalSum = 0;
+
+		//iterate through every row
+		for (unsigned int i = 0; i < dataArray.size(); ++i)
+		{
+			int largest = -1;
+			int smallest = -1;
+
+			// find largest and smallest item in row
+			for(unsigned int j = 0; j < dataArray[i].size(); ++j)
+			{
+				if (dataArray[i][j] < smallest || smallest == -1)
+				{
+					smallest = dataArray[i][j];
+				}
+
+				if (dataArray[i][j] > largest || largest == -1)
+				{
+					largest = dataArray[i][j];
+				}
+			}
+
+
+			// find their difference
+			// add the difference to totalSum
+			cout << "largest on row:  " << largest << endl;
+			cout << "smallest on row: " << smallest << endl;
+			cout << "diff:            " << largest - smallest << endl;
+
+			totalSum += (largest - smallest);
+
+			cout << "total sum so far: " << totalSum << endl;
+
+		}
+
+	return totalSum;
+}
+
+void initialise()
+{
+	sampleData = readFile("src/sampleInput.txt", '\t');
+	data = readFile("src/input.txt", '\t');
 }
 
 int main()
 {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	readFile();
+	int result = -1;
 
+	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+	initialise();
+	cout << "no. of rows in sampleData: " << sampleData.size() << "\n";
 	cout << "no. of rows in data: " << data.size() << "\n";
+
+
+	if (test( calculate(sampleData), sampleSolution))
+	{
+		result = calculate(data);
+		cout << "Final result is: " << result << endl;
+	}
 
 	return 0;
 
