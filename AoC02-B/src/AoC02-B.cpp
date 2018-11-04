@@ -123,32 +123,50 @@ bool test(int actual, int expected)
 }
 
 
-// Solution A: brute force it
-int calculate1(vector<vector<int> > dataArray)
+// USed by calculate3
+int iterateOnRow(vector<int> dataArray)
+{
+	// iterate through the row
+			for(unsigned int j = 0; j < dataArray.size(); ++j)
+			{
+
+				for (unsigned int k = j+1; k < dataArray.size(); ++k)
+				{
+					if ((dataArray[j] % dataArray[k]) == 0)
+					{
+						return dataArray[j] / dataArray[k];
+					}
+					else if ((dataArray[k] % dataArray[j]) == 0)
+					{
+						return dataArray[k] / dataArray[j];
+					}
+				}
+
+			}
+
+			return -1;
+}
+
+
+// Solution C: brute force it, with break clauses
+int calculate3(vector<vector<int> > dataArray)
 {
 
 	int totalSum = 0;
+	int result = 0;
 
 	//iterate through every row
 	for (unsigned int i = 0; i < dataArray.size(); ++i)
 	{
 
-		// iterate through the row
-		for(unsigned int j = 0; j < dataArray[i].size(); ++j)
+		result = iterateOnRow(dataArray[i]);
+		if (result != -1)
 		{
-
-			for (unsigned int k = j+1; k < dataArray[i].size(); ++k)
-			{
-				if ((dataArray[i][j] % dataArray[i][k]) == 0)
-				{
-					totalSum += dataArray[i][j] / dataArray[i][k];
-				}
-				else if ((dataArray[i][k] % dataArray[i][j]) == 0)
-				{
-					totalSum += dataArray[i][k] / dataArray[i][j];
-				}
-			}
-
+			totalSum += result;
+		}
+		else
+		{
+			//Error condition
 		}
 
 	}
@@ -188,6 +206,42 @@ int calculate2(vector<vector<int> > dataArray)
 
 	return totalSum;
 }
+
+// Solution A: brute force it
+int calculate1(vector<vector<int> > dataArray)
+{
+
+	int totalSum = 0;
+
+	//iterate through every row
+	for (unsigned int i = 0; i < dataArray.size(); ++i)
+	{
+
+
+		// iterate through the row
+		for(unsigned int j = 0; j < dataArray[i].size(); ++j)
+		{
+
+			for (unsigned int k = j+1; k < dataArray[i].size(); ++k)
+			{
+				if ((dataArray[i][j] % dataArray[i][k]) == 0)
+				{
+					totalSum += dataArray[i][j] / dataArray[i][k];
+				}
+				else if ((dataArray[i][k] % dataArray[i][j]) == 0)
+				{
+					totalSum += dataArray[i][k] / dataArray[i][j];
+				}
+			}
+
+		}
+
+	}
+
+	return totalSum;
+}
+
+
 
 int calculate(vector<vector<int> > dataArray)
 {
