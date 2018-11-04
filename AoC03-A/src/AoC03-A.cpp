@@ -31,7 +31,7 @@
 //Your puzzle input is 289326.
 
 
-// My thoughts:
+// ===========My thoughts:=================
 // Lower right corners are odd squares: 1x1 = 1, 3x3 = 9, 5x5 = 25 etc
 // The number of values in each 'ring' of the spiral is 4 (sides of a square) multiplied by
 // the even number below the corner square
@@ -44,14 +44,14 @@
 
 
 // Manhattan distance is at most Side length for any number on that ring
-// and Side length/2 is at minimum for any number on that ring.
+// and is at minimum Side length/2  for any number on that ring.
 
 
 
-	// Take an input
-	// Find next largest square number with odd root
-	// Find root
-	// work out x, y coords
+// Take an input
+// Find next largest square number with odd root
+// Find root
+// work out x, y coords
 
 //============================================================================
 
@@ -61,10 +61,10 @@
 #include <stdlib.h>
 using namespace std;
 
-const unsigned int UPPER_LIMIT = 5000;
-const unsigned int sampleDataSize = 4;
+const unsigned int ARBITRARY_UPPER_LIMIT = 5000;
+const unsigned int SAMPLE_DATA_SIZE = 4;
 //input, number of steps
-unsigned int sampleData[sampleDataSize][2] = {{1,0},{12,3},{23,2},{1024,31}};
+unsigned int sampleData[SAMPLE_DATA_SIZE][2] = {{1,0},{12,3},{23,2},{1024,31}};
 unsigned int data = 289326;
 
 
@@ -90,7 +90,7 @@ bool test(unsigned int actual, unsigned int expected)
 int calculateCornerRoot(unsigned int target)
 {
 
-	for (unsigned int root = 1; root < UPPER_LIMIT; root= root+2)
+	for (unsigned int root = 1; root < ARBITRARY_UPPER_LIMIT; root= root+2)
 		{
 			if ((root*root) >= target)
 				return root;
@@ -119,31 +119,26 @@ int calculate(int target)
 	else
 	{
 
+		// Not ideal for an environment with limited resources
+		// but kept this way for readability! :)
+
 		//get previous ring corner value
 		int previousCornerValue = (cornerRoot-2)*(cornerRoot-2);
 
-
-		//subtract prevCornVal from target to get position on ring perimeter
+		//subtract previousCornerValue from target to get position on ring perimeter
 		int ringPerimeterPosition = target - previousCornerValue;
-
 
 		//modulo sideLength to get position on ring side
 		int ringSidePosition = ringPerimeterPosition % sideLength;
 
-
-		//difference between ringSidePos and minMD
+		//difference between ringSidePosition and minManhattanDistance
 		int difference = ringSidePosition - minMD;
 
 		// make sure difference is always a positive number
 		int absdiff = abs(difference);
 
-
-		// abs(ringsidePos - (minMD)) + (minMD)
+		// Result must be at least the minMD, plus the difference
 		result = absdiff + minMD;
-
-
-
-
 
 	}
 
@@ -154,7 +149,7 @@ int calculate(int target)
 bool calculateAllTestData()
 {
 
-	for(unsigned int i = 0; i < sampleDataSize; i++)
+	for(unsigned int i = 0; i < SAMPLE_DATA_SIZE; i++)
 	{
 		if (!test(calculate(sampleData[i][0]), sampleData[i][1]))
 		{
@@ -173,6 +168,7 @@ int main() {
 
 	if ((calculateAllTestData()))
 	{
+		cout << "===================PASSED ALL TESTS=================" << endl;
 		result = calculate(data);
 		cout << "Final result is: " << result << endl;
 	}
