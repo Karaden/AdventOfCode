@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <string>
+#include <algorithm>    // std::sort
 
 using namespace std;
 
@@ -121,8 +122,9 @@ bool test(int actual, int expected)
 
 }
 
+
 // Solution A: brute force it
-int calculate(vector<vector<int> > dataArray)
+int calculate1(vector<vector<int> > dataArray)
 {
 
 	int totalSum = 0;
@@ -130,7 +132,6 @@ int calculate(vector<vector<int> > dataArray)
 	//iterate through every row
 	for (unsigned int i = 0; i < dataArray.size(); ++i)
 	{
-
 
 		// iterate through the row
 		for(unsigned int j = 0; j < dataArray[i].size(); ++j)
@@ -155,40 +156,44 @@ int calculate(vector<vector<int> > dataArray)
 	return totalSum;
 }
 
-//
-//// Solution A: brute force it
-//int calculate2(vector<vector<int> > dataArray)
-//{
-//
-//	int totalSum = 0;
-//
-//	//iterate through every row
-//	for (unsigned int i = 0; i < dataArray.size(); ++i)
-//	{
-//
-//
-//		// iterate through the row
-//		for(unsigned int j = 0; j < dataArray[i].size(); ++j)
-//		{
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//		}
-//
-//
-//
-//
-//
-//	}
-//
-//	return totalSum;
-//}
+
+// Solution 2: Sort before compare
+int calculate2(vector<vector<int> > dataArray)
+{
+
+	int totalSum = 0;
+
+	//iterate through every row
+	for (unsigned int i = 0; i < dataArray.size(); ++i)
+	{
+
+		sort (dataArray[i].begin(), dataArray[i].end()); //Sorts from low to high
+
+		// iterate through the row
+		for(unsigned int j = 0; j < dataArray[i].size(); ++j)
+		{
+
+
+			for (unsigned int k = j+1; k < dataArray[i].size(); ++k)
+			{
+				if ((dataArray[i][k] % dataArray[i][j]) == 0)
+				{
+					totalSum += dataArray[i][k] / dataArray[i][j];
+				}
+			}
+
+		}
+
+	}
+
+	return totalSum;
+}
+
+int calculate(vector<vector<int> > dataArray)
+{
+	return calculate1(dataArray);
+}
+
 
 void initialise()
 {
