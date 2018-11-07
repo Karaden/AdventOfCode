@@ -28,6 +28,7 @@
 #include <sstream>
 #include <vector>
 #include <tuple>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,7 +48,6 @@ void init_sampleData()
 	sampleData.push_back(make_pair(vector<string>  {"a", "ab", "abc", "abd,", "abf", "abj"}, true)); // is a valid passphrase, because all letters need to be used when forming another word.
 	sampleData.push_back(make_pair(vector<string>  {"iiii", "oiii", "ooii", "oooi", "oooo"}, true));
 	sampleData.push_back(make_pair(vector<string>  {"oiii", "ioii", "iioi", "iiio"}, false)); // is not valid - any of these words can be rearranged to form any other word.
-
 }
 
 struct splitter
@@ -137,24 +137,27 @@ bool lineContainsValidPassphrase(vector<string> target)
 
 	//Container::const_iterator it;
     set<string>::iterator it;
+    string word;
 
 	//For each string in the vector (word in the passphrase)
 	for (unsigned int i = 0; i < target.size(); ++i)
 	{
+
+		 word = target[i];
+		 sort(word.begin(), word.end());
+
 		//Check to see if the word has already been used in the passphrase
-		it = wordList.find(target[i]);
+		it = wordList.find(word);
 
 		if (it != wordList.end())
 		{
 			// the word exists in the set - the passphrase is not valid
-
 			return false;
 		}
 		else
 		{
 			// the word is not in the set - add it
-			wordList.insert(target[i]);
-			it = wordList.begin();
+			wordList.insert(word);
 		}
 	}
 
