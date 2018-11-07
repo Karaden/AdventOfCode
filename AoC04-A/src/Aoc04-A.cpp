@@ -156,7 +156,6 @@ bool lineContainsValidPassphrase(vector<string> target)
 		{
 			// the word is not in the set - add it
 			wordList.insert(target[i]);
-			//it = wordList.begin();
 		}
 	}
 
