@@ -27,7 +27,7 @@
 //			If valid, increment validity count
 
 
-//Using C++11
+//Using C++11 for nicer vector/map initialisation
 //============================================================================
 
 #include <fstream>
@@ -36,16 +36,19 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
 vector<vector<string> > data;
+vector<pair< vector<string>, bool> > sampleData;
 
-map< vector<string>, bool> sampleData {
-	{ {"aa", "bb", "cc", "dd", "ee"}, true},
-	{ {"aa", "bb", "cc", "dd", "aa"}, false},
-	{ {"aa", "bb", "cc", "dd", "aaa"}, true}
-};
+void init_sampleData()
+{
+	sampleData.push_back(make_pair(vector<string> {"aa", "bb", "cc", "dd", "ee"}, true));
+	sampleData.push_back(make_pair(vector<string> {"aa", "bb", "cc", "dd", "aa"}, false));
+	sampleData.push_back(make_pair(vector<string>  {"aa", "bb", "cc", "dd", "aaa"}, true));
+}
 
 struct splitter
 {
@@ -108,7 +111,7 @@ vector<vector<string> > readFile(const char * filepath, char token)
 	return target;
 }
 
-bool test(unsigned int actual, unsigned int expected)
+bool test(bool actual, bool expected)
 {
 	bool result = false;
 
@@ -127,39 +130,69 @@ bool test(unsigned int actual, unsigned int expected)
 
 }
 
-int calculate(int target)
+bool lineContainsValidPassphrase(vector<string> target)
 {
-	return -1;
+	//TODO
+	return false;
+}
+
+int calculate(vector<vector<string> > target)
+{
+	int totalValid = -1;
+
+	for (auto const& x : target)
+		{
+		   if (lineContainsValidPassphrase(x))
+		   {
+			   totalValid++;
+		   }
+		}
+
+	return totalValid;
 }
 
 bool calculateAllTestData()
 {
-	return false;
+	cout << "===================COMMENCING TESTS=================" << endl;
+
+
+	for (unsigned int i = 0; i < sampleData.size(); ++i)
+	{
+		if (!test(lineContainsValidPassphrase(sampleData[i].first), sampleData[i].second))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 
 void initialise()
 {
+	init_sampleData();
 	data = readFile("src/input.txt", ' ');
 }
 
 int main() {
 	int result = -1;
 	cout << "AoC04-A begin:" << endl; // prints AoC04-A begin:
+
 	initialise();
+
 	cout << "no. of rows in sampleData: " << sampleData.size() << "\n";
 	cout << "no. of rows in data: " << data.size() << "\n";
 
 	if ((calculateAllTestData()))
-		{
+	{
 			cout << "===================PASSED ALL TESTS=================" << endl;
-			//result = calculate(data);
+			result = calculate(data);
 			cout << "Final result is: " << result << endl;
-		}
+	}
 	else
 	{
 		cout << "Tests failed." << endl;
 	}
 
-		return 0;
+	return 0;
 }
