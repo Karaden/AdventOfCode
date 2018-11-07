@@ -142,7 +142,7 @@ bool lineContainsValidPassphrase(vector<string> target)
 	//For each string in the vector (word in the passphrase)
 	for (unsigned int i = 0; i < target.size(); ++i)
 	{
-
+		//Sort the characters of the word alphabetically
 		 word = target[i];
 		 sort(word.begin(), word.end());
 
