@@ -32,7 +32,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <map>
+#include <set>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -42,6 +42,8 @@ using namespace std;
 
 vector<vector<string> > data;
 vector<pair< vector<string>, bool> > sampleData;
+
+set<string> wordList;
 
 void init_sampleData()
 {
@@ -132,13 +134,38 @@ bool test(bool actual, bool expected)
 
 bool lineContainsValidPassphrase(vector<string> target)
 {
-	//TODO
-	return false;
+	//Make sure dictionary is empty
+	wordList.clear();
+
+	//Container::const_iterator it;
+    set<string>::iterator it;
+
+	//For each string in the vector (word in the passphrase)
+	for (unsigned int i = 0; i < target.size(); ++i)
+	{
+		//Check to see if the word has already been used in the passphrase
+		it = wordList.find(target[i]);
+
+		if (it != wordList.end())
+		{
+			// the word exists in the set - the passphrase is not valid
+
+			return false;
+		}
+		else
+		{
+			// the word is not in the set - add it
+			wordList.insert(target[i]);
+			it = wordList.begin();
+		}
+	}
+
+	return true;
 }
 
 int calculate(vector<vector<string> > target)
 {
-	int totalValid = -1;
+	int totalValid = 0;
 
 	for (auto const& x : target)
 		{
