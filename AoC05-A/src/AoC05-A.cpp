@@ -5,8 +5,6 @@
 // Copyright   : Your copyright notice
 // Description :
 
-// Using C++11 for nicer vector initialisation
-
 // a maze of jump instructions - find the exit.
 //
 // The message includes a list of the offsets for each jump. Jumps are relative:
@@ -26,27 +24,40 @@
 // 0
 // 1
 // -3
+//
 // Positive jumps ("forward") move downward; negative jumps move upward.
 // For legibility in this example, these offset values will be written all on one
 // line, with the current instruction marked in parentheses. The following steps
 // would be taken before an exit is found:
 //
 // (0) 3  0  1  -3  - before we have taken any steps.
-// (1) 3  0  1  -3  - jump with offset 0 (that is, don't jump at all). Fortunately, the instruction is then incremented to 1.
-//  2 (3) 0  1  -3  - step forward because of the instruction we just modified. The first instruction is incremented again, now to 2.
+// (1) 3  0  1  -3  - jump with offset 0 (that is, don't jump at all). Fortunately,
+//					  the instruction is then incremented to 1.
+//  2 (3) 0  1  -3  - step forward because of the instruction we just modified.
+//					  The first instruction is incremented again, now to 2.
 //  2  4  0  1 (-3) - jump all the way to the end; leave a 4 behind.
 //  2 (4) 0  1  -2  - go back to where we just were; increment -3 to -2.
 //  2  5  0  1  -2  - jump 4 steps forward, escaping the maze.
 // In this example, the exit is reached in 5 steps.
 //
 
+
+//Thoughts:
+
+// Index (pointer?) arithmetic in an array until an overflow is reached.
+
+
+// Using C++11 for nicer vector initialisation
 //============================================================================
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <climits>
 using namespace std;
+
+const unsigned int LOOP_BREAKER =  UINT_MAX;
 
 vector<int> sampleData = {0, 3,	0, 1,-3};
 int sampleSolution = 5;
@@ -105,7 +116,27 @@ bool test(int actual, int expected)
 
 int calculate(vector<int> dataArray)
 {
-	return -1;
+	unsigned int stepCount = 0;
+	const unsigned int MAX_ARRAY_INDEX = dataArray.size();
+	unsigned int arrayIndex = 0;
+	int arrayContents = 0;
+
+
+	// Any underflow on a UINT will be a massive number - larger than the MAX_ARRAY_INDEX!
+	while ((arrayIndex < MAX_ARRAY_INDEX) && (stepCount < LOOP_BREAKER))
+	{
+		cout << "===Step #" << stepCount << "===" << endl;
+
+		arrayContents = dataArray[arrayIndex];
+		dataArray[arrayIndex]++;
+		arrayIndex = arrayIndex + arrayContents;
+
+		cout << "dataArray[" << arrayIndex << "] : " << dataArray[arrayIndex] << endl;
+
+		stepCount++;
+	}
+
+	return stepCount;
 }
 
 
@@ -125,8 +156,8 @@ int main()
 	cout << "AoC05-A begin:" << endl; // prints AoC05-A begin:
 
 	initialise();
-	cout << "no. of rows in sampleData: " << sampleData.size() << "\n";
-	cout << "no. of rows in data: " << data.size() << "\n";
+	cout << "no. of rows in sampleData: " << sampleData.size() << endl;
+	cout << "no. of rows in data: " << data.size() << endl;
 
 	if ((calculateAllTestData()))
 		{
