@@ -48,6 +48,8 @@
 
 // NOTE: Print out statements for the while loop are commented out, due to the massive
 // difference in runtime length that they make!
+// With print outs: 	35m42.504s
+// With no print outs: 	0m0.378s
 
 
 // Using C++11 for nicer vector initialisation
